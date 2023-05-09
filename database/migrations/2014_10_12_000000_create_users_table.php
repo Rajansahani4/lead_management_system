@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->string('phone');
-            $table->String('country_code');
-            $table->String('address');
+            $table->String('country_code')->nullable()->default(NULL);
+            $table->String('address')->nullable()->default(NULL);
             $table->enum('role', ['admin', 'telecaller'])->default('telecaller');
             $table->string('remember_token')->nullable()->default(NULL);
             $table->timestamps();
