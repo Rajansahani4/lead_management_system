@@ -30,14 +30,14 @@ class UserCampaignController extends Controller
                 $deleteLeads=Lead::findOrFail($value['id'])->delete();
             }
             $usercomp=UserCampaign::findOrFail($id)->delete();
-            return response()->json(['deleteTelecaller' => " Telecaller Deleted Successfully!!"]);
+            return response()->json(['deleteTelecaller' => ' Telecaller Deleted Successfully!!']);
         }
         else if($getCountOfTelecaller==1 &&  count($checkLeadsPending)>0)
-            return response()->json(['deleteTelecallerError' => "You can't Delete this Telecaller due to incomplete task!!"]);
+            return response()->json(['deleteTelecallerError' => 'You can"t Delete this Telecaller due to incomplete task!!']);
         else if($getCountOfTelecaller==1 &&  count($checkLeadsPending)==0)
         {
             $usercomp=UserCampaign::findOrFail($id)->delete();
-            return response()->json(['deleteTelecaller' => " Telecaller Deleted Successfully!!"]);
+            return response()->json(['deleteTelecaller' => ' Telecaller Deleted Successfully!!']);
         }
     }
 }

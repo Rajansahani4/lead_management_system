@@ -85,6 +85,7 @@
             {{ $obj->links() }}
         </div>
     </main>
+
     <script>
         $(document).ready(function() {
             $(".deleteBtn").click(function(e) {

@@ -1,4 +1,4 @@
-{{-- for see the list of telecaller who is working in partcular campaign --}}
+{{-- for see the list of telecaller who is working in particular campaign --}}
 @extends('master')
 <style>
         #heading{
@@ -59,7 +59,8 @@
         </table>
         {{ $campid->links() }}
     </main>
-    <script>
+    <script src="{{ asset('assets/js/campaigns/showcampaign.js') }}"></script>
+    {{-- <script>
         $(document).ready(function() {
             $(".deleteBtn").click(function(e) {
                 e.preventDefault();
@@ -111,5 +112,5 @@
                 })
             });
         })
-    </script>
+    </script> --}}
 @endsection

@@ -63,14 +63,14 @@ class LeadController extends Controller
     {
         $campid=UserCampaign::where('campaign_id',$id);
         Lead::create(['campaign_id'=>$id,'name'=>$request->name,'email'=>$request->email,'phone'=>$request->phone]);
-        return redirect('/campaign')->with('message',"Inserted successfuly");
+        return redirect('/campaign')->with('message','Inserted successfuly');
     }
 
     //uploading a single lead
     public function uploadLead(Request $request)
     {
         $getStorePhones=Lead::where('campaign_id',$request->campaign_id)->pluck('phone')->toArray();
-        if(collect($getStorePhones)->contains($request->phone)==true)
+        if(collect($getStorePhones)->contains($request->phone)===true)
             return response()->json(['leadAlert' =>'Lead Already Exists!']);
         else
         {

@@ -207,14 +207,17 @@
             </div>
         </div>
     </main>
+
     <script>
+        //for csv uploading
         var dbColumn = <?php echo json_encode($columns); ?>;
         var file = '';
         var campaign_id = '';
+
         $(document).ready(function() {
-            $(".file").on('change', function(e) {
-                campaign_id = $(this).data('campaign_id');
-                var formData = new FormData();
+                $(".file").on('change', function(e) {
+                        campaign_id = $(this).data('campaign_id');
+                        var formData = new FormData();
                 file = $(this)[0].files[0];
                 formData.append('file', file);
                 formData.append('campaign_id', campaign_id);
@@ -270,7 +273,7 @@
                 });
             });
 
-            //validation on lead table
+            //validation on lead table so user can't choose same column twice
             $(document).on('change', '.set_column_data', function() {
                 var selectedOption = $(this);
                 var column_name = selectedOption.val();
@@ -288,7 +291,7 @@
                 });
             });
 
-            //validation on csv
+            //validation on csv so user can't choose same column twice
             $(document).on('change', '.set_csv_data', function() {
                 var selectedOption = $(this);
                 var column_name = selectedOption.val();
@@ -302,7 +305,7 @@
                 });
             });
 
-            //storing csv table
+            //storing csv file's headers(columns)
             $(document).on('click', '#import', function(event) {
                 event.preventDefault();
                 var csvData = $("#csvform").serializeArray();
@@ -314,7 +317,7 @@
                         storCsvColumnName.push($(this).val());
                     }
                 });
-                // storing lead table
+                // storing lead table's columns
                 var storLeadColumnName = [];
                 $('.set_column_data').each(function() {
                     if ($(this).val() == undefined || $(this).val() == '') {
@@ -323,7 +326,8 @@
                         storLeadColumnName.push($(this).val());
                     }
                 });
-                //import calling
+
+                //import calling after csv file validation for csv uploading into database
                 $cb = $('input#csvFirstRow');
                 $csvfirstRow = ($cb.prop('checked'));
                 var csvfirstRow = $csvfirstRow;
@@ -363,7 +367,7 @@
 
             });
 
-            //FOR SINGLE LEAD
+            //FOR ADDING A SINGLE LEAD FROM USER
             $(".addlead").click(function() {
                 campaign_id = $(this).data('campaign_id');
                 $.ajax({
@@ -383,7 +387,7 @@
                 });
             });
 
-            //UPLOADING SINGLE LEAD
+            //UPLOADING SINGLE LEAD FROM USER
             $("#storelead").click(function(event) {
                 $('#campaigns_id').val(campaign_id);
                 event.preventDefault();
@@ -419,7 +423,7 @@
                 })
             });
 
-            //deleting campaign
+            //deleting campaign make sure that campaign don't have pending leads
             $(".deleteBtn").click(function(e) {
                 e.preventDefault();
                 Swal.fire({
@@ -449,13 +453,15 @@
                             },
                             processData: false,
                             success: function(data) {
+                                //if campaign have pending leads then it will not allow to delete it
                                 if (data.deleteCampaignError) {
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Oops...',
                                         text: "You Can't Delete this Campaign Due To Incomplete Task!!",
                                     })
-                                } else {
+                                } //if campaing don't have pending leads  then only u can delete
+                                else {
                                     Swal.fire(
                                         'Deleted!',
                                         'Campaign has been deleted.',
@@ -471,4 +477,5 @@
             });
         });
     </script>
+
 @endsection

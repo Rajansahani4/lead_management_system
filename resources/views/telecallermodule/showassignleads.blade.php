@@ -55,72 +55,71 @@
                 </form>
             </div>
         </div>
+
         <div class="container">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                    <tr class="item">
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (isset($leadsDetails))
-                    @if (count($leadsDetails) == 0)
-                        <tr class="item">
-                            <td colspan="4" style="color:rgb(91, 85, 85)">
-                                <h6>No Leads's Found</h6>
-                            </td>
-                        </tr>
-                    @else
-                        @foreach ($leadsDetails as $val)
-                            <tr class="data_{{ $val['id'] }}" style="text-align: center;">
-                                <td>{{ $val['name'] }}</td>
-                                <td>{{ $val['email'] }}</td>
-                                <td>{{ $val['phone'] }}</td>
-                                @if ($val['status'] == 'pending')
-                                    <td style="width: 185;">
-                                        <form id="status">
-                                            <input type="hidden" id="telecaller_id" name="telecaller_id"
-                                                value="{{ auth()->user()->id }}" />
-                                            <input type="hidden" id="lead_id" name="lead_id"
-                                                value="{{ $val['id'] }}" />
-                                            <input type="hidden" id="campaignId" name="campaignId"
-                                                value="{{ $campaignId }}" />
-                                            <select class="form-select selectstatus" name="status" id="selectstatus"
-                                                style="display:flex;MARGIN-LEFT: -25PX;margin-top: -22; font-weight:600"
-                                                data-leadId="{{ $val['id'] }}">
-                                                <option value="pending">pending</option>
-                                                <option value="in progress">in progress</option>
-                                                <option value="on hold">on hold</option>
-                                                <option value="converted">converted</option>
-                                            </select>
-                                        </form>
-                                    </td>
-                                @elseif($val['status'] == 'converted')
-                                    <td>
-                                        <h4><span class="badge bg-success">Converted</span></h4>
-                                    </td>
-                                @elseif($val['status'] == 'in progress')
-                                    <td>
-                                        <h4><span class="badge bg-warning">in progress</span></h4>
-                                    </td>
-                                @elseif($val['status'] == 'on hold')
-                                    <td>
-                                        <h4><span class="badge bg-danger">on hold</span></h4>
-                                    </td>
-                                @endif
+            <div class="card mb-4">
+                <div class="card-header">
+                    <center>
+                        <h4>Lead's Details</h4>
+                    </center>
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr class="item">
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">Status</th>
                             </tr>
-                        @endforeach
-                     @endif
-                     @endif
-                </tbody>
-            </table>
-
+                        </thead>
+                        <tbody>
+                            @if (isset($leadsDetails))
+                            @foreach ($leadsDetails as $val)
+                                <tr class="data_{{ $val['id'] }}" style="text-align: center;">
+                                    <td>{{ $val['name'] }}</td>
+                                    <td>{{ $val['email'] }}</td>
+                                    <td>{{ $val['phone'] }}</td>
+                                    @if ($val['status'] == 'pending')
+                                        <td style="width: 185;">
+                                            <form id="status">
+                                                <input type="hidden" id="telecaller_id" name="telecaller_id"
+                                                    value="{{ auth()->user()->id }}" />
+                                                <input type="hidden" id="lead_id" name="lead_id"
+                                                    value="{{ $val['id'] }}" />
+                                                <input type="hidden" id="campaignId" name="campaignId"
+                                                    value="{{ $campaignId }}" />
+                                                <select class="form-select selectstatus" name="status" id="selectstatus"
+                                                    style="display:flex;MARGIN-LEFT: -25PX;margin-top: -22; font-weight:600"
+                                                    data-leadId="{{ $val['id'] }}">
+                                                    <option value="pending">pending</option>
+                                                    <option value="in progress">in progress</option>
+                                                    <option value="on hold">on hold</option>
+                                                    <option value="converted">converted</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                    @elseif($val['status'] == 'converted')
+                                        <td>
+                                            <h4><span class="badge bg-success">Converted</span></h4>
+                                        </td>
+                                    @elseif($val['status'] == 'in progress')
+                                        <td>
+                                            <h4><span class="badge bg-warning">in progress</span></h4>
+                                        </td>
+                                    @elseif($val['status'] == 'on hold')
+                                        <td>
+                                            <h4><span class="badge bg-danger">on hold</span></h4>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
-
     </main>
     <script>
         $(document).ready(function() {

@@ -11,39 +11,50 @@ class CsvController extends Controller
     //uploadign csv file
     public function upload(Request $request)
     {
+        //for getting number of telecaller working in this campaign
         $countOfTelecaller=UserCampaign::where('campaign_id',$request->campaign_id)->count();
+
+        //if there is  telecaller available into this campaign then u can insert leads
         if($countOfTelecaller>0)
         {
             if ($_FILES['file']['name'] != '') {
                 $file_array = explode(".", $_FILES['file']['name']);
 
+                //storing the extension
                 $extension = end($file_array);
-                if ($extension == 'csv') {
+
+                //if file type is csv then only it will go in if
+                if ($extension === 'csv') {
                     $file_data = fopen($_FILES['file']['tmp_name'], 'r');
                     $file_header = fgetcsv($file_data);
 
-                    if(($file_header[0])==null)
-                        return response()->json(['blankCsv' => "Csv File is Empty"]);
+                    //if your csv file is empty then it will throw response
+                    if(($file_header[0])===null)
+                        return response()->json(['blankCsv' => 'Csv File is Empty']);
 
-                }else {
+                }//when u choose non-csv file then it will throw error
+                else {
                     $error = 'Only <b>.csv</b> file allowed';
-                    return response()->json(['wrongfile' => "PLease choose Only CSV File"]);
+                    return response()->json(['wrongfile' => 'PLease choose Only CSV File']);
                 }
             }
+            //csv header will store first row(columns) of csv file
             return response()->json(['csvheader' => $file_header]);
         }
+        //if there is no more telecaller available into this campaign then u can not insert leads
         else
-            return response()->json(['telecallerEmpty' => "There is no more Telecaller in this campaign"]);
+            return response()->json(['telecallerEmpty' => 'There is no more Telecaller in this campaign']);
     }
     //importing csv file
     public function import(Request $request)
     {
+
         $leadColumnArray = explode(",", $request->storLeadColumnName);
         $csvColumnArray = explode(",", $request->storCsvColumnName);
 
         //if phone is not selected
         if($leadColumnArray[0]!="phone" &&$leadColumnArray[1]!="phone" && $leadColumnArray[2]!="phone")
-            return response()->json(['choosePhone' => "Phone Field is necessary"]);
+            return response()->json(['choosePhone' => 'Phone Field is necessary']);
 
         //creating pair of key value for csv mapping
         $finalArray = [];
@@ -69,6 +80,8 @@ class CsvController extends Controller
         $telecallerList=User::whereIn('id',$telecallerList)->orderBy('name')->pluck('id')->toArray();
         $telecallerIndex = 0;
         $flage=true;
+
+        //if your csv file don't have column name then flage will false
         if($request->csvfirstRow=="true")
         {
             $startIndex=0;
@@ -76,6 +89,8 @@ class CsvController extends Controller
         }
         else
             $startIndex=1;
+
+        //csv mapping
         for ($i = $startIndex; $i < $count; $i++) {
             foreach ($leads[$i] as $leadIndex => $leadVal) {
                 foreach ($finalArray as $key => $value) {
@@ -103,11 +118,11 @@ class CsvController extends Controller
 
         if(!$flage){
             $rec=$count-$countFaildArray;
-            return response()->json(['messgae' => "imported successfully",'rec'=>$rec,'count'=>$count]);
+            return response()->json(['messgae' => 'imported successfully','rec'=>$rec,'count'=>$count]);
         }
         else{
             $rec=($count-1)-$countFaildArray;
-            return response()->json(['messgae' => "imported successfully",'rec'=>$rec,'count'=>$count-1]);
+            return response()->json(['messgae' => 'imported successfully','rec'=>$rec,'count'=>$count-1]);
         }
 
     }

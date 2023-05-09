@@ -41,19 +41,9 @@
                     {{ session('message') }}
                 </div>
             @endif
-            @if (session('messageDelete'))
-                <div class="alert alert-danger">
-                    {{ session('messageDelete') }}
-                </div>
-            @endif
             @if (session('messageUpdated'))
                 <div class="alert alert-success">
                     {{ session('messageUpdated') }}
-                </div>
-            @endif
-            @if (session('messageRespond'))
-                <div class="alert alert-danger">
-                    {{ session('messageRespond') }}
                 </div>
             @endif
             @if (session('passwordChange'))

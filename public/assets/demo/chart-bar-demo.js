@@ -4,7 +4,6 @@ Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSyste
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 // Bar Chart Example
-
 leadsData.forEach(myFunction);
 function myFunction(item, index) {
 var ctx = document.getElementById("myBarChart_"+index);

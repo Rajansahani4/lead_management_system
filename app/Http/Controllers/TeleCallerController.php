@@ -46,7 +46,7 @@ class TeleCallerController extends Controller
     {
             $request->validated();
             User::create(['name' => $request->name, 'email' => $request->email,'password' => \Hash::make($request->password), 'phone' => $request->phone,'country_code' => $request->country_code, 'address' => $request->address]);
-            return redirect('/telecaller')->with('message',"Telecaller Created successfuly");
+            return redirect('/telecaller')->with('message','Telecaller Created successfuly');
     }
     /**
      * Display the specified resource.
@@ -85,12 +85,12 @@ class TeleCallerController extends Controller
         if(collect($emailList)->contains($request->email))
         {
             $obj=User::find($id);
-            return redirect()->route('telecaller.edit', [$id])->with('obj',$obj)->with("msgUserExists","Email Already Exists");
+            return redirect()->route('telecaller.edit', [$id])->with('obj',$obj)->with('msgUserExists','Email Already Exists');
         }
         else
         {   $request->validated();
             User::where('id',$id)->update(['name' => $request['name'],'email' => $request['email'],'password' => \Hash::make($request['password']),'phone' => $request['phone'],'country_code' =>$request['countrycode'],'address'=>$request['address']]);
-            return redirect()->route('telecaller.index')->with('messageUpdated',"Telecaller Updated successfuly");
+            return redirect()->route('telecaller.index')->with('messageUpdated','Telecaller Updated successfuly');
         }
 
     }
@@ -105,11 +105,11 @@ class TeleCallerController extends Controller
     {
         $getLeads=Lead::where('telecaller_id',$id)->whereNotIn('status',['converted'])->get()->toArray();
         if(count($getLeads)>0)
-            return response()->json(['deleteTelecallerError' => "You can't Delete this Telecaller due to incomplete task!!"]);
+            return response()->json(['deleteTelecallerError' => 'You can"t Delete this Telecaller due to incomplete task!!']);
         else {
             User::findOrFail($id)->delete();
             UserCampaign::where('telecaller_id',$id)->delete();
-            return response()->json(['deleteTelecaller' => " Telecaller Deleted Successfully!!"]);
+            return response()->json(['deleteTelecaller' => ' Telecaller Deleted Successfully!!']);
         }
     }
     //wallet details and transaction history
@@ -135,13 +135,13 @@ class TeleCallerController extends Controller
     //after changing the status of leads
     public function selectstatus(Request $request)
     {
-        if($request->status=="converted")
+        if($request->status==='converted')
         {
             Lead::where('id',$request->lead_id)->update(['status' => 'converted']);
             $conversionCost=Campaign::where('id',$request->campaignId)->pluck('conversion_cost')->toArray();
             TransactionHistory::create(['telecaller_id' =>auth()->user()->id, 'campaign_id' =>$request->campaignId,'lead_id'=>$request->lead_id,'amount'=>$conversionCost[0]]);
         }
-        else if($request->status=="in progress")
+        else if($request->status==='in progress')
             Lead::where('id',$request->lead_id)->update(['status' => 'in progress']);
         else
             Lead::where('id',$request->lead_id)->update(['status' => 'on hold']);
@@ -173,13 +173,13 @@ class TeleCallerController extends Controller
     {
         $request->validated();
         $userPassword=User::where('id',$request->user_id)->first();
-        if((\Hash::check($request->oldPassword,$userPassword->password))&&($request->newPassword==$request->newConfirmPassword))
+        if((\Hash::check($request->oldPassword,$userPassword->password))&&($request->newPassword===$request->newConfirmPassword))
         {
             User::where('id',$request->user_id)->update(['password' => \Hash::make($request->newPassword)]);
-            return redirect()->route('dashboard')->with("passwordChange","Password Changes Successfully!");
+            return redirect()->route('dashboard')->with('passwordChange','Password Changes Successfully!');
         }
         else
-            return redirect()->back()->with('passwordWarning',"Please Enter Valid Old Password!");
+            return redirect()->back()->with('passwordWarning','Please Enter Valid Old Password!');
     }
 }
 
